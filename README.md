@@ -1,4 +1,3 @@
-
 # react-native-we-accept
 
 ## Getting started
@@ -11,7 +10,6 @@
 
 ### Manual installation
 
-
 #### iOS
 
 1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
@@ -22,24 +20,35 @@
 #### Android
 
 1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.breadfast.reactnative.RNWeAcceptPackage;` to the imports at the top of the file
-  - Add `new RNWeAcceptPackage()` to the list returned by the `getPackages()` method
-2. Append the following lines to `android/settings.gradle`:
-  	```
-  	include ':react-native-we-accept'
-  	project(':react-native-we-accept').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-we-accept/android')
-  	```
-3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-  	```
-      compile project(':react-native-we-accept')
-  	```
 
+- Add `import com.breadfast.reactnative.RNWeAcceptPackage;` to the imports at the top of the file
+- Add `new RNWeAcceptPackage()` to the list returned by the `getPackages()` method
+
+2. Append the following lines to `android/settings.gradle`:
+   ```
+   include ':react-native-we-accept'
+   project(':react-native-we-accept').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-we-accept/android')
+   ```
+3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+   ```
+     compile project(':react-native-we-accept')
+   ```
+4. add repository as below
+   ```
+   allprojects {
+   	repositories {
+   		google()
+   		...
+   		maven { url "https://dl.bintray.com/paymobsolutions/paymob_accept_sdk" }
+   	}
+   }
+   ```
 
 ## Usage
+
 ```javascript
-import RNWeAccept from 'react-native-we-accept';
+import RNWeAccept from "react-native-we-accept";
 
 // TODO: What to do with the module?
 RNWeAccept;
 ```
-  

@@ -1,8 +1,7 @@
-
 {
   "name": "react-native-we-accept",
   "version": "1.0.0",
-  "description": "",
+  "description": "We Accept SDK React native",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,8 +9,8 @@
   "keywords": [
     "react-native"
   ],
-  "author": "",
-  "license": "",
+  "author": "m.ghobashy@breadfast.com",
+  "license": "MIT",
   "peerDependencies": {
     "react-native": "^0.41.2"
   }
