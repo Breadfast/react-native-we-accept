@@ -61,7 +61,7 @@ Payment with Token
 ```javascript
 import WeAccept from "react-native-we-accept";
 
-WeAccept.initWeAccept({
+WeAccept.payWithToken({
   token: "12345",
   maskedPanNumber: "XXXXXXXXXXXXXX1234",
   firstName: "first_name",
@@ -93,3 +93,39 @@ WeAccept.initWeAccept({
 | **`email`**           | TODO        | String | **Optional** |
 | **`phoneNumber`**     | TODO        | String | **Optional** |
 | **`postalCode`**      | TODO        | String | **Optional** |
+
+Payment with No Token
+
+```javascript
+import WeAccept from "react-native-we-accept";
+
+WeAccept.payWithNoToken({
+  showSaveCard: false,
+  firstName: "first_name",
+  lastName: "last_name",
+  building: "building",
+  floor: "floor",
+  apartment: "apartment",
+  city: "city",
+  state: "state",
+  country: "country",
+  email: "email",
+  phoneNumber: "phoneNumber",
+  postalCode: "postalCode",
+});
+```
+
+| Prop                | Description | Type    | Default      |
+| ------------------- | ----------- | ------- | ------------ |
+| **`showSavedCard`** | TODO        | Boolean | **Required** |
+| **`firstName`**     | TODO        | String  | **Optional** |
+| **`lastName`**      | TODO        | String  | **Optional** |
+| **`building`**      | TODO        | String  | **Optional** |
+| **`floor`**         | TODO        | String  | **Optional** |
+| **`apartment`**     | TODO        | String  | **Optional** |
+| **`city`**          | TODO        | String  | **Optional** |
+| **`state`**         | TODO        | String  | **Optional** |
+| **`country`**       | TODO        | String  | **Optional** |
+| **`email`**         | TODO        | String  | **Optional** |
+| **`phoneNumber`**   | TODO        | String  | **Optional** |
+| **`postalCode`**    | TODO        | String  | **Optional** |

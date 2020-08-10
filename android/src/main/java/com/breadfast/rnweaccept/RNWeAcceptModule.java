@@ -45,15 +45,15 @@ public class RNWeAcceptModule extends ReactContextBaseJavaModule {
 
 
   
-  private void startPayActivityNoToken(Activity currentActivity, Boolean showSaveCard, HashMap data) {
+  private void startPayActivityNoToken(Activity currentActivity, HashMap data) {
     Intent pay_intent = new Intent(currentActivity, PayActivity.class);
-
+    // Boolean showSaveCard = (Boolean) data.get('showSaveCard');
     putNormalExtras(pay_intent, data);
     pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, true);
-    pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, showSaveCard);
-    pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, showSaveCard);
+    // pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, showSaveCard);
+    // pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, showSaveCard);
     // pay_intent.putExtra(PayActivityIntentKeys.BUTTON_COLOR, 0x8033B5E5);
-
+    mSuccessCallback.invoke(currentActivity);
     currentActivity.startActivityForResult(pay_intent, ACCEPT_PAYMENT_REQUEST);
 }
 
@@ -62,8 +62,8 @@ private void startPayActivityToken(Activity currentActivity, HashMap data) {
 
     putNormalExtras(pay_intent, data);
     // replace this with your actual card token
-    pay_intent.putExtra(PayActivityIntentKeys.TOKEN, (String) paramsMap.get("token"));
-    pay_intent.putExtra(PayActivityIntentKeys.MASKED_PAN_NUMBER, (String) paramsMap.get("maskedPanNumber"));
+    pay_intent.putExtra(PayActivityIntentKeys.TOKEN, (String) data.get("token"));
+    pay_intent.putExtra(PayActivityIntentKeys.MASKED_PAN_NUMBER, (String) data.get("maskedPanNumber"));
     pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, false);
     pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, true);
     pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, false);
@@ -73,47 +73,47 @@ private void startPayActivityToken(Activity currentActivity, HashMap data) {
 
 private void putNormalExtras(Intent intent, HashMap data) {
     // Pass the correct values for the billing data keys
-    String firstName = (String) paramsMap.get("firstName");
+    String firstName = (String) data.get("firstName");
     if(firstName != null){
       intent.putExtra(PayActivityIntentKeys.FIRST_NAME, firstName);
     }
-    String lastName = (String) paramsMap.get("lastName");
+    String lastName = (String) data.get("lastName");
     if(lastName != null){
       intent.putExtra(PayActivityIntentKeys.LAST_NAME, lastName);
     }
-    String building = (String) paramsMap.get("building");
+    String building = (String) data.get("building");
     if(building != null){
       intent.putExtra(PayActivityIntentKeys.BUILDING, building);
     }
-    String floor = (String) paramsMap.get("floor");
+    String floor = (String) data.get("floor");
     if(floor != null){
       intent.putExtra(PayActivityIntentKeys.FLOOR, floor);
     }
-    String apartment = (String) paramsMap.get("apartment");
+    String apartment = (String) data.get("apartment");
     if(apartment != null){
       intent.putExtra(PayActivityIntentKeys.APARTMENT, apartment);
     }
-    String city = (String) paramsMap.get("city");
+    String city = (String) data.get("city");
     if(city != null){
       intent.putExtra(PayActivityIntentKeys.CITY, city);
     }
-    String state = (String) paramsMap.get("state");
+    String state = (String) data.get("state");
     if(state != null){
       intent.putExtra(PayActivityIntentKeys.STATE, state);
     }
-    String country = (String) paramsMap.get("country");
+    String country = (String) data.get("country");
     if(country != null){
       intent.putExtra(PayActivityIntentKeys.COUNTRY, country);
     }
-    String email = (String) paramsMap.get("email");
+    String email = (String) data.get("email");
     if(email != null){
       intent.putExtra(PayActivityIntentKeys.EMAIL, email);
     }
-    String phoneNumber = (String) paramsMap.get("phoneNumber");
+    String phoneNumber = (String) data.get("phoneNumber");
     if(phoneNumber != null){
       intent.putExtra(PayActivityIntentKeys.PHONE_NUMBER, phoneNumber);
     }
-    String postalCode = (String) paramsMap.get("postalCode");
+    String postalCode = (String) data.get("postalCode");
     if(postalCode != null){
       intent.putExtra(PayActivityIntentKeys.POSTAL_CODE, postalCode);
     }
@@ -122,52 +122,58 @@ private void putNormalExtras(Intent intent, HashMap data) {
 
 private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
   @Override
-  public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-      super.onActivityResult(activity, requestCode, resultCode, data);
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      super.onActivityResult(requestCode, resultCode, data);
 
-      Bundle extras = data.getExtras();
-
-      if (requestCode == ACCEPT_PAYMENT_REQUEST) {
-        if (resultCode == IntentConstants.USER_CANCELED) {
-          // User canceled and did no payment request was fired
-          ToastMaker.displayShortToast(activity, "User canceled!!");
-        } else if (resultCode == IntentConstants.MISSING_ARGUMENT) {
-          // You forgot to pass an important key-value pair in the intent's extras
-          ToastMaker.displayShortToast(activity, "Missing Argument == " + extras.getString(IntentConstants.MISSING_ARGUMENT_VALUE));
-        } else if (resultCode == IntentConstants.TRANSACTION_ERROR) {
-          // An error occurred while handling an API's response
-          ToastMaker.displayShortToast(activity, "Reason == " + extras.getString(IntentConstants.TRANSACTION_ERROR_REASON));
-        } else if (resultCode == IntentConstants.TRANSACTION_REJECTED) {
-          // User attempted to pay but their transaction was rejected
+      try{
+        Bundle extras = data.getExtras();
+        Activity activity = getCurrentActivity();
+  
+        if (requestCode == ACCEPT_PAYMENT_REQUEST) {
+          if (resultCode == IntentConstants.USER_CANCELED) {
+            // User canceled and did no payment request was fired
+            ToastMaker.displayShortToast(activity, "User canceled!!");
+          } else if (resultCode == IntentConstants.MISSING_ARGUMENT) {
+            // You forgot to pass an important key-value pair in the intent's extras
+            ToastMaker.displayShortToast(activity, "Missing Argument == " + extras.getString(IntentConstants.MISSING_ARGUMENT_VALUE));
+          } else if (resultCode == IntentConstants.TRANSACTION_ERROR) {
+            // An error occurred while handling an API's response
+            ToastMaker.displayShortToast(activity, "Reason == " + extras.getString(IntentConstants.TRANSACTION_ERROR_REASON));
+          } else if (resultCode == IntentConstants.TRANSACTION_REJECTED) {
+            // User attempted to pay but their transaction was rejected
+            // Use the static keys declared in PayResponseKeys to extract the fields you want
+            ToastMaker.displayShortToast(activity, extras.getString(PayResponseKeys.DATA_MESSAGE));
+          } else if (resultCode == IntentConstants.TRANSACTION_REJECTED_PARSING_ISSUE) {
+            // User attempted to pay but their transaction was rejected. An error occured while reading the returned JSON
+            ToastMaker.displayShortToast(activity, extras.getString(IntentConstants.RAW_PAY_RESPONSE));
+          } else if (resultCode == IntentConstants.TRANSACTION_SUCCESSFUL) {
+            // User finished their payment successfully
+            // Use the static keys declared in PayResponseKeys to extract the fields you want
+            ToastMaker.displayShortToast(activity, extras.getString(PayResponseKeys.DATA_MESSAGE));
+          } else if (resultCode == IntentConstants.TRANSACTION_SUCCESSFUL_PARSING_ISSUE) {
+            // User finished their payment successfully. An error occured while reading the returned JSON.
+            ToastMaker.displayShortToast(activity, "TRANSACTION_SUCCESSFUL - Parsing Issue");
+            // ToastMaker.displayShortToast(activity, extras.getString(IntentConstants.RAW_PAY_RESPONSE));
+          } else if (resultCode == IntentConstants.TRANSACTION_SUCCESSFUL_CARD_SAVED) {
+          // User finished their payment successfully and card was saved.
           // Use the static keys declared in PayResponseKeys to extract the fields you want
-          ToastMaker.displayShortToast(activity, extras.getString(PayResponseKeys.DATA_MESSAGE));
-        } else if (resultCode == IntentConstants.TRANSACTION_REJECTED_PARSING_ISSUE) {
-          // User attempted to pay but their transaction was rejected. An error occured while reading the returned JSON
-          ToastMaker.displayShortToast(activity, extras.getString(IntentConstants.RAW_PAY_RESPONSE));
-        } else if (resultCode == IntentConstants.TRANSACTION_SUCCESSFUL) {
-          // User finished their payment successfully
-          // Use the static keys declared in PayResponseKeys to extract the fields you want
-          ToastMaker.displayShortToast(activity, extras.getString(PayResponseKeys.DATA_MESSAGE));
-        } else if (resultCode == IntentConstants.TRANSACTION_SUCCESSFUL_PARSING_ISSUE) {
-          // User finished their payment successfully. An error occured while reading the returned JSON.
-          ToastMaker.displayShortToast(activity, "TRANSACTION_SUCCESSFUL - Parsing Issue");
-          // ToastMaker.displayShortToast(activity, extras.getString(IntentConstants.RAW_PAY_RESPONSE));
-        } else if (resultCode == IntentConstants.TRANSACTION_SUCCESSFUL_CARD_SAVED) {
-        // User finished their payment successfully and card was saved.
-        // Use the static keys declared in PayResponseKeys to extract the fields you want
-        // Use the static keys declared in SaveCardResponseKeys to extract the fields you want
-          ToastMaker.displayShortToast(activity, "Token == " + extras.getString(SaveCardResponseKeys.TOKEN));
-        } else if (resultCode == IntentConstants.USER_CANCELED_3D_SECURE_VERIFICATION) {
-          ToastMaker.displayShortToast(activity, "User canceled 3-d secure verification!!");
-          // Note that a payment process was attempted. You can extract the original returned values
-          // Use the static keys declared in PayResponseKeys to extract the fields you want
-          ToastMaker.displayShortToast(activity, extras.getString(PayResponseKeys.PENDING));
-        } else if (resultCode == IntentConstants.USER_CANCELED_3D_SECURE_VERIFICATION_PARSING_ISSUE) {
-          ToastMaker.displayShortToast(activity, "User canceled 3-d scure verification - Parsing Issue!!");
-          // Note that a payment process was attempted.
-          // User finished their payment successfully. An error occured while reading the returned JSON.
-          ToastMaker.displayShortToast(activity, extras.getString(IntentConstants.RAW_PAY_RESPONSE));
+          // Use the static keys declared in SaveCardResponseKeys to extract the fields you want
+            ToastMaker.displayShortToast(activity, "Token == " + extras.getString(SaveCardResponseKeys.TOKEN));
+          } else if (resultCode == IntentConstants.USER_CANCELED_3D_SECURE_VERIFICATION) {
+            ToastMaker.displayShortToast(activity, "User canceled 3-d secure verification!!");
+            // Note that a payment process was attempted. You can extract the original returned values
+            // Use the static keys declared in PayResponseKeys to extract the fields you want
+            ToastMaker.displayShortToast(activity, extras.getString(PayResponseKeys.PENDING));
+          } else if (resultCode == IntentConstants.USER_CANCELED_3D_SECURE_VERIFICATION_PARSING_ISSUE) {
+            ToastMaker.displayShortToast(activity, "User canceled 3-d scure verification - Parsing Issue!!");
+            // Note that a payment process was attempted.
+            // User finished their payment successfully. An error occured while reading the returned JSON.
+            ToastMaker.displayShortToast(activity, extras.getString(IntentConstants.RAW_PAY_RESPONSE));
+          }
         }
+
+      }catch (Exception e){
+        mErrorCallback.invoke(e);
       }
 
       // if (requestCode == ACCEPT_PAYMENT_REQUEST) {
@@ -252,8 +258,27 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
 
 //    final String token = (String) paramsMap.get("token");
 //    final String maskedPanNumber = (String) paramsMap.get("maskedPanNumber");
+    try{
+      this.startPayActivityToken(currentActivity, paramsMap);
+    } catch(Exception e){
+      mErrorCallback.invoke(e);
+    }
+  }
 
-    this.startPayActivityToken(currentActivity, paramsMap);
+  @ReactMethod
+  public void payWithNoToken(ReadableMap params, Callback successCallback, Callback errorCallback) {
+    Activity currentActivity = getCurrentActivity();
+    mSuccessCallback = successCallback;
+    mErrorCallback = errorCallback;
+    mParams = params;
+
+    if (currentActivity == null) {
+      mErrorCallback.invoke(E_ACTIVITY_DOES_NOT_EXIST);
+      return;
+    }
+    HashMap paramsMap = params.toHashMap();
+    mSuccessCallback.invoke(currentActivity);
+    this.startPayActivityNoToken(currentActivity, paramsMap);
   }
   
   // @ReactMethod
