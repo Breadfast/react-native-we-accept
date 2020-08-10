@@ -45,10 +45,10 @@ public class RNWeAcceptModule extends ReactContextBaseJavaModule {
 
 
   
-  private void startPayActivityNoToken(Activity currentActivity, Boolean showSaveCard) {
+  private void startPayActivityNoToken(Activity currentActivity, Boolean showSaveCard, HashMap data) {
     Intent pay_intent = new Intent(currentActivity, PayActivity.class);
 
-    putNormalExtras(pay_intent);
+    putNormalExtras(pay_intent, data);
     pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, true);
     pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, showSaveCard);
     pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, showSaveCard);
@@ -57,13 +57,13 @@ public class RNWeAcceptModule extends ReactContextBaseJavaModule {
     currentActivity.startActivityForResult(pay_intent, ACCEPT_PAYMENT_REQUEST);
 }
 
-private void startPayActivityToken(Activity currentActivity, String token, String maskedPanNumber) {
+private void startPayActivityToken(Activity currentActivity, HashMap data) {
     Intent pay_intent = new Intent(currentActivity, PayActivity.class);
 
-    putNormalExtras(pay_intent);
+    putNormalExtras(pay_intent, data);
     // replace this with your actual card token
-    pay_intent.putExtra(PayActivityIntentKeys.TOKEN, token);
-    pay_intent.putExtra(PayActivityIntentKeys.MASKED_PAN_NUMBER, maskedPanNumber);
+    pay_intent.putExtra(PayActivityIntentKeys.TOKEN, (String) paramsMap.get("token"));
+    pay_intent.putExtra(PayActivityIntentKeys.MASKED_PAN_NUMBER, (String) paramsMap.get("maskedPanNumber"));
     pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, false);
     pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, true);
     pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, false);
@@ -71,20 +71,52 @@ private void startPayActivityToken(Activity currentActivity, String token, Strin
     currentActivity.startActivityForResult(pay_intent, ACCEPT_PAYMENT_REQUEST);
 }
 
-private void putNormalExtras(Intent intent) {
+private void putNormalExtras(Intent intent, HashMap data) {
     // Pass the correct values for the billing data keys
-    intent.putExtra(PayActivityIntentKeys.FIRST_NAME, "first_name");
-    intent.putExtra(PayActivityIntentKeys.LAST_NAME, "last_name");
-    intent.putExtra(PayActivityIntentKeys.BUILDING, "1");
-    intent.putExtra(PayActivityIntentKeys.FLOOR, "1");
-    intent.putExtra(PayActivityIntentKeys.APARTMENT, "1");
-    intent.putExtra(PayActivityIntentKeys.CITY, "cairo");
-    intent.putExtra(PayActivityIntentKeys.STATE, "new_cairo");
-    intent.putExtra(PayActivityIntentKeys.COUNTRY, "egypt");
-    intent.putExtra(PayActivityIntentKeys.EMAIL, "email@gmail.com");
-    intent.putExtra(PayActivityIntentKeys.PHONE_NUMBER, "2345678");
-    intent.putExtra(PayActivityIntentKeys.POSTAL_CODE, "3456");
-
+    String firstName = (String) paramsMap.get("firstName");
+    if(firstName != null){
+      intent.putExtra(PayActivityIntentKeys.FIRST_NAME, firstName);
+    }
+    String lastName = (String) paramsMap.get("lastName");
+    if(lastName != null){
+      intent.putExtra(PayActivityIntentKeys.LAST_NAME, lastName);
+    }
+    String building = (String) paramsMap.get("building");
+    if(building != null){
+      intent.putExtra(PayActivityIntentKeys.BUILDING, building);
+    }
+    String floor = (String) paramsMap.get("floor");
+    if(floor != null){
+      intent.putExtra(PayActivityIntentKeys.FLOOR, floor);
+    }
+    String apartment = (String) paramsMap.get("apartment");
+    if(apartment != null){
+      intent.putExtra(PayActivityIntentKeys.APARTMENT, apartment);
+    }
+    String city = (String) paramsMap.get("city");
+    if(city != null){
+      intent.putExtra(PayActivityIntentKeys.CITY, city);
+    }
+    String state = (String) paramsMap.get("state");
+    if(state != null){
+      intent.putExtra(PayActivityIntentKeys.STATE, state);
+    }
+    String country = (String) paramsMap.get("country");
+    if(country != null){
+      intent.putExtra(PayActivityIntentKeys.COUNTRY, country);
+    }
+    String email = (String) paramsMap.get("email");
+    if(email != null){
+      intent.putExtra(PayActivityIntentKeys.EMAIL, email);
+    }
+    String phoneNumber = (String) paramsMap.get("phoneNumber");
+    if(phoneNumber != null){
+      intent.putExtra(PayActivityIntentKeys.PHONE_NUMBER, phoneNumber);
+    }
+    String postalCode = (String) paramsMap.get("postalCode");
+    if(postalCode != null){
+      intent.putExtra(PayActivityIntentKeys.POSTAL_CODE, postalCode);
+    }
     intent.putExtra(PayActivityIntentKeys.PAYMENT_KEY, paymentKey);
 }
 
@@ -218,10 +250,10 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
 
     HashMap paramsMap = params.toHashMap();
 
-    final String token = (String) paramsMap.get("token");
-    final String maskedPanNumber = (String) paramsMap.get("maskedPanNumber");
+//    final String token = (String) paramsMap.get("token");
+//    final String maskedPanNumber = (String) paramsMap.get("maskedPanNumber");
 
-    this.startPayActivityToken(currentActivity, token, maskedPanNumber);
+    this.startPayActivityToken(currentActivity, paramsMap);
   }
   
   // @ReactMethod

@@ -46,9 +46,50 @@
 
 ## Usage
 
-```javascript
-import RNWeAccept from "react-native-we-accept";
+Initialize Payment key
 
-// TODO: What to do with the module?
-RNWeAccept;
+```javascript
+import WeAccept from "react-native-we-accept";
+
+WeAccept.initWeAccept({
+  paymentKey: "put your payment key here",
+});
 ```
+
+Payment with Token
+
+```javascript
+import WeAccept from "react-native-we-accept";
+
+WeAccept.initWeAccept({
+  token: "12345",
+  maskedPanNumber: "XXXXXXXXXXXXXX1234",
+  firstName: "first_name",
+  lastName: "last_name",
+  building: "building",
+  floor: "floor",
+  apartment: "apartment",
+  city: "city",
+  state: "state",
+  country: "country",
+  email: "email",
+  phoneNumber: "phoneNumber",
+  postalCode: "postalCode",
+});
+```
+
+| Prop                  | Description | Type   | Default      |
+| --------------------- | ----------- | ------ | ------------ |
+| **`token`**           | TODO        | String | **Required** |
+| **`maskedPanNumber`** | TODO        | String | **Required** |
+| **`firstName`**       | TODO        | String | **Optional** |
+| **`lastName`**        | TODO        | String | **Optional** |
+| **`building`**        | TODO        | String | **Optional** |
+| **`floor`**           | TODO        | String | **Optional** |
+| **`apartment`**       | TODO        | String | **Optional** |
+| **`city`**            | TODO        | String | **Optional** |
+| **`state`**           | TODO        | String | **Optional** |
+| **`country`**         | TODO        | String | **Optional** |
+| **`email`**           | TODO        | String | **Optional** |
+| **`phoneNumber`**     | TODO        | String | **Optional** |
+| **`postalCode`**      | TODO        | String | **Optional** |
