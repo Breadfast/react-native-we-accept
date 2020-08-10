@@ -23,12 +23,14 @@ public class RNWeAcceptPackage implements ReactPackage {
       return Collections.emptyList();
     }
 
+    // @Override
+    // public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
+    //   List<NativeModule> modules = new ArrayList<>();
+    //   modules.add(new RNWeAcceptModule(reactContext));
+    //   return modules;
+    // }
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-      List<NativeModule> modules = new ArrayList<>();
-
-        modules.add(new RNWeAcceptModule(reactContext));
-
-        return modules;
+      return Collections.emptyList();
     }
 }
