@@ -47,13 +47,13 @@ public class RNWeAcceptModule extends ReactContextBaseJavaModule {
   
   private void startPayActivityNoToken(Activity currentActivity, HashMap data) {
     Intent pay_intent = new Intent(currentActivity, PayActivity.class);
-    // Boolean showSaveCard = (Boolean) data.get('showSaveCard');
+    Boolean showSaveCard = (Boolean) data.get("showSaveCard");
     putNormalExtras(pay_intent, data);
     pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, true);
-    // pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, showSaveCard);
-    // pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, showSaveCard);
+    pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, showSaveCard);
+    pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, showSaveCard);
     // pay_intent.putExtra(PayActivityIntentKeys.BUTTON_COLOR, 0x8033B5E5);
-    mSuccessCallback.invoke(currentActivity);
+    // mSuccessCallback.invoke(currentActivity);
     currentActivity.startActivityForResult(pay_intent, ACCEPT_PAYMENT_REQUEST);
 }
 
@@ -128,7 +128,13 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
       try{
         Bundle extras = data.getExtras();
         Activity activity = getCurrentActivity();
-  
+
+        // mErrorCallback.invoke(E_ACTIVITY_DOES_NOT_EXIST);
+        if (activity == null) {
+          mErrorCallback.invoke(E_ACTIVITY_DOES_NOT_EXIST);
+          return;
+        }
+        // mSuccessCallback.invoke(requestCode);
         if (requestCode == ACCEPT_PAYMENT_REQUEST) {
           if (resultCode == IntentConstants.USER_CANCELED) {
             // User canceled and did no payment request was fired
@@ -277,7 +283,7 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
       return;
     }
     HashMap paramsMap = params.toHashMap();
-    mSuccessCallback.invoke(currentActivity);
+    // mSuccessCallback.invoke("Callback function called successful");
     this.startPayActivityNoToken(currentActivity, paramsMap);
   }
   

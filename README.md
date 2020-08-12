@@ -43,6 +43,44 @@
    	}
    }
    ```
+5. Add to your AndroidManifest.xml
+
+```
+xmlns:tools="http://schemas.android.com/tools"
+```
+
+and
+
+```
+android:allowBackup="false"
+android:supportsRtl="true"
+tools:replace="android:supportsRtl, android:allowBackup"
+```
+
+to look like this
+
+```
+<manifest
+...
+xmlns:tools="http://schemas.android.com/tools">
+
+<application
+    ...
+    android:allowBackup="false"
+    android:supportsRtl="true"
+    tools:replace="android:supportsRtl, android:allowBackup">
+```
+
+6. add action bar styles to styles.xml (replace AppTheme if exist)
+
+```
+<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+</style>
+```
 
 ## Usage
 
