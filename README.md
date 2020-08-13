@@ -84,16 +84,6 @@ xmlns:tools="http://schemas.android.com/tools">
 
 ## Usage
 
-Initialize Payment key
-
-```javascript
-import WeAccept from "react-native-we-accept";
-
-WeAccept.initWeAccept({
-  paymentKey: "put your payment key here",
-});
-```
-
 Payment with Token
 
 ```javascript
@@ -118,6 +108,7 @@ WeAccept.payWithToken({
 
 | Prop                  | Description | Type   | Default      |
 | --------------------- | ----------- | ------ | ------------ |
+| **`paymentKey`**      | TODO        | String | **Required** |
 | **`token`**           | TODO        | String | **Required** |
 | **`maskedPanNumber`** | TODO        | String | **Required** |
 | **`firstName`**       | TODO        | String | **Optional** |
@@ -155,6 +146,7 @@ WeAccept.payWithNoToken({
 
 | Prop                | Description | Type    | Default      |
 | ------------------- | ----------- | ------- | ------------ |
+| **`paymentKey`**    | TODO        | String  | **Required** |
 | **`showSavedCard`** | TODO        | Boolean | **Required** |
 | **`firstName`**     | TODO        | String  | **Optional** |
 | **`lastName`**      | TODO        | String  | **Optional** |
