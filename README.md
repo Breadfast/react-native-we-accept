@@ -106,22 +106,23 @@ WeAccept.payWithToken({
 });
 ```
 
-| Prop                  | Description | Type   | Default      |
-| --------------------- | ----------- | ------ | ------------ |
-| **`paymentKey`**      | TODO        | String | **Required** |
-| **`token`**           | TODO        | String | **Required** |
-| **`maskedPanNumber`** | TODO        | String | **Required** |
-| **`firstName`**       | TODO        | String | **Optional** |
-| **`lastName`**        | TODO        | String | **Optional** |
-| **`building`**        | TODO        | String | **Optional** |
-| **`floor`**           | TODO        | String | **Optional** |
-| **`apartment`**       | TODO        | String | **Optional** |
-| **`city`**            | TODO        | String | **Optional** |
-| **`state`**           | TODO        | String | **Optional** |
-| **`country`**         | TODO        | String | **Optional** |
-| **`email`**           | TODO        | String | **Optional** |
-| **`phoneNumber`**     | TODO        | String | **Optional** |
-| **`postalCode`**      | TODO        | String | **Optional** |
+| Prop                  | Description                    | Type   | Default      |
+| --------------------- | ------------------------------ | ------ | ------------ |
+| **`paymentKey`**      | Generated one-time payment key | String | **Required** |
+| **`token`**           | user token                     | String | **Required** |
+| **`maskedPanNumber`** | last four digits               | String | **Required** |
+| **`activityTitle`**   | title for the 3d secure Screen | String | **Optional** |
+| **`firstName`**       | TODO                           | String | **Optional** |
+| **`lastName`**        | TODO                           | String | **Optional** |
+| **`building`**        | TODO                           | String | **Optional** |
+| **`floor`**           | TODO                           | String | **Optional** |
+| **`apartment`**       | TODO                           | String | **Optional** |
+| **`city`**            | TODO                           | String | **Optional** |
+| **`state`**           | TODO                           | String | **Optional** |
+| **`country`**         | TODO                           | String | **Optional** |
+| **`email`**           | TODO                           | String | **Optional** |
+| **`phoneNumber`**     | TODO                           | String | **Optional** |
+| **`postalCode`**      | TODO                           | String | **Optional** |
 
 Payment with No Token
 
@@ -144,18 +145,35 @@ WeAccept.payWithNoToken({
 });
 ```
 
-| Prop                | Description | Type    | Default      |
-| ------------------- | ----------- | ------- | ------------ |
-| **`paymentKey`**    | TODO        | String  | **Required** |
-| **`showSavedCard`** | TODO        | Boolean | **Required** |
-| **`firstName`**     | TODO        | String  | **Optional** |
-| **`lastName`**      | TODO        | String  | **Optional** |
-| **`building`**      | TODO        | String  | **Optional** |
-| **`floor`**         | TODO        | String  | **Optional** |
-| **`apartment`**     | TODO        | String  | **Optional** |
-| **`city`**          | TODO        | String  | **Optional** |
-| **`state`**         | TODO        | String  | **Optional** |
-| **`country`**       | TODO        | String  | **Optional** |
-| **`email`**         | TODO        | String  | **Optional** |
-| **`phoneNumber`**   | TODO        | String  | **Optional** |
-| **`postalCode`**    | TODO        | String  | **Optional** |
+| Prop                | Description                    | Type    | Default      |
+| ------------------- | ------------------------------ | ------- | ------------ |
+| **`paymentKey`**    | Generated one-time payment key | String  | **Required** |
+| **`showSavedCard`** | show save card checkbox        | Boolean | **Required** |
+| **`activityTitle`** | title for the 3d secure Screen | String  | **Optional** |
+| **`firstName`**     | TODO                           | String  | **Optional** |
+| **`lastName`**      | TODO                           | String  | **Optional** |
+| **`building`**      | TODO                           | String  | **Optional** |
+| **`floor`**         | TODO                           | String  | **Optional** |
+| **`apartment`**     | TODO                           | String  | **Optional** |
+| **`city`**          | TODO                           | String  | **Optional** |
+| **`state`**         | TODO                           | String  | **Optional** |
+| **`country`**       | TODO                           | String  | **Optional** |
+| **`email`**         | TODO                           | String  | **Optional** |
+| **`phoneNumber`**   | TODO                           | String  | **Optional** |
+| **`postalCode`**    | TODO                           | String  | **Optional** |
+
+Callbacks functions
+
+onSuccess function
+
+| Prop          | Description                                                           | Type    | Default      |
+| ------------- | --------------------------------------------------------------------- | ------- | ------------ |
+| **`status`**  | boolean to determine whether transaction was done successfully or not | Boolean | **Optional** |
+| **`code`**    | result code generated by SDK                                          | String  | **Optional** |
+| **`message`** | error message mapped from result code                                 | String  | **Optional** |
+
+```
+(status: boolean, code: number, message)=>{
+  ... add your success code block here
+}
+```

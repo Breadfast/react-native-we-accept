@@ -44,11 +44,17 @@ public class RNWeAcceptModule extends ReactContextBaseJavaModule {
     Intent pay_intent = new Intent(currentActivity, PayActivity.class);
     Boolean showSaveCard = (Boolean) data.get("showSaveCard");
     putNormalExtras(pay_intent, data);
+    // Boolean to save the entered card details by default 
     pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, true);
-    pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, showSaveCard);
+    // Boolean to display the save card checkbox
     pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, showSaveCard);
-    // pay_intent.putExtra(PayActivityIntentKeys.BUTTON_COLOR, 0x8033B5E5);
-    // mSuccessCallback.invoke(currentActivity);
+    pay_intent.putExtra(PayActivityIntentKeys.THEME_COLOR,0x80970073);
+    // String themeColor = (String) data.get("themeColor");
+    // if(themeColor != null){
+    //   pay_intent.putExtra(PayActivityIntentKeys.THEME_COLOR, Integer.parseInt(themeColor, 16));
+
+    // }
+
     currentActivity.startActivityForResult(pay_intent, ACCEPT_PAYMENT_REQUEST);
 }
 
@@ -59,9 +65,14 @@ private void startPayActivityToken(Activity currentActivity, HashMap data) {
     // replace this with your actual card token
     pay_intent.putExtra(PayActivityIntentKeys.TOKEN, (String) data.get("token"));
     pay_intent.putExtra(PayActivityIntentKeys.MASKED_PAN_NUMBER, (String) data.get("maskedPanNumber"));
-    pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, false);
-    pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, true);
-    pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, false);
+    // pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, false);
+    // pay_intent.putExtra(PayActivityIntentKeys.SHOW_ALERTS, true);
+    // pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, false);
+    // String themeColor = (String) data.get("themeColor");
+    // if(themeColor != null){
+    pay_intent.putExtra(PayActivityIntentKeys.THEME_COLOR,0x80970073);
+    //   pay_intent.putExtra(PayActivityIntentKeys.THEME_COLOR, Integer.parseInt(themeColor, 16));
+    // }
 
     currentActivity.startActivityForResult(pay_intent, ACCEPT_PAYMENT_REQUEST);
 }
@@ -116,6 +127,10 @@ private void putNormalExtras(Intent intent, HashMap data) {
     if(paymentKey != null){
       intent.putExtra(PayActivityIntentKeys.PAYMENT_KEY, paymentKey);
     }
+    String activityTitle = (String) data.get("activityTitle");
+    if(activityTitle!=null){
+      intent.putExtra(PayActivityIntentKeys.THREE_D_SECURE_ACTIVITY_TITLE, activityTitle);
+    }
 }
 
 private final ActivityEventListener mActivityEventListener = new BaseActivityEventListener() {
@@ -125,6 +140,7 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
       super.onActivityResult(activity, requestCode, resultCode, data);
       try{
         Bundle extras = data.getExtras();
+        boolean successStatus = false;
         // Activity activity = getCurrentActivity();
 
         // mErrorCallback.invoke(E_ACTIVITY_DOES_NOT_EXIST);
@@ -155,15 +171,18 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
             // User finished their payment successfully
             // Use the static keys declared in PayResponseKeys to extract the fields you want
             responseMessage = extras.getString(PayResponseKeys.DATA_MESSAGE);
+            successStatus = true;
           } else if (resultCode == IntentConstants.TRANSACTION_SUCCESSFUL_PARSING_ISSUE) {
             // User finished their payment successfully. An error occured while reading the returned JSON.
             responseMessage = "TRANSACTION_SUCCESSFUL - Parsing Issue";
+            successStatus = true;
             // responseMessage = extras.getString(IntentConstants.RAW_PAY_RESPONSE);
           } else if (resultCode == IntentConstants.TRANSACTION_SUCCESSFUL_CARD_SAVED) {
           // User finished their payment successfully and card was saved.
           // Use the static keys declared in PayResponseKeys to extract the fields you want
           // Use the static keys declared in SaveCardResponseKeys to extract the fields you want
             responseMessage = "Token == " + extras.getString(SaveCardResponseKeys.TOKEN);
+            successStatus = true;
           } else if (resultCode == IntentConstants.USER_CANCELED_3D_SECURE_VERIFICATION) {
             responseMessage = "User canceled 3-d secure verification!!";
             // Note that a payment process was attempted. You can extract the original returned values
@@ -176,7 +195,10 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
             responseMessage = extras.getString(IntentConstants.RAW_PAY_RESPONSE);
           }
           ToastMaker.displayShortToast(activity, responseMessage);
-          mSuccessCallback.invoke(responseMessage);
+          // HashMap resultMap  = new HashMap();
+          // resultMap.put("code", resultCode);
+          // resultMap.put("message", responseMessage);
+          mSuccessCallback.invoke(successStatus, resultCode, responseMessage);
         }
 
       }catch (Exception e){
