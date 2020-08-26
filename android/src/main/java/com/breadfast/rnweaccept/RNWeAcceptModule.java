@@ -43,9 +43,10 @@ public class RNWeAcceptModule extends ReactContextBaseJavaModule {
   private void startPayActivityNoToken(Activity currentActivity, HashMap data) {
     Intent pay_intent = new Intent(currentActivity, PayActivity.class);
     Boolean showSaveCard = (Boolean) data.get("showSaveCard");
+    Boolean saveCardDefault = (Boolean) data.get("saveCardDefault");
     putNormalExtras(pay_intent, data);
     // Boolean to save the entered card details by default 
-    pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, true);
+    pay_intent.putExtra(PayActivityIntentKeys.SAVE_CARD_DEFAULT, saveCardDefault);
     // Boolean to display the save card checkbox
     pay_intent.putExtra(PayActivityIntentKeys.SHOW_SAVE_CARD, showSaveCard);
     pay_intent.putExtra(PayActivityIntentKeys.THEME_COLOR,0x80970073);
@@ -141,6 +142,7 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
       try{
         Bundle extras = data.getExtras();
         boolean successStatus = false;
+        String token = "";
         // Activity activity = getCurrentActivity();
 
         // mErrorCallback.invoke(E_ACTIVITY_DOES_NOT_EXIST);
@@ -183,6 +185,7 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
           // Use the static keys declared in SaveCardResponseKeys to extract the fields you want
             responseMessage = "Token == " + extras.getString(SaveCardResponseKeys.TOKEN);
             successStatus = true;
+            token = extras.getString(SaveCardResponseKeys.TOKEN);
           } else if (resultCode == IntentConstants.USER_CANCELED_3D_SECURE_VERIFICATION) {
             responseMessage = "User canceled 3-d secure verification!!";
             // Note that a payment process was attempted. You can extract the original returned values
@@ -198,7 +201,7 @@ private final ActivityEventListener mActivityEventListener = new BaseActivityEve
           // HashMap resultMap  = new HashMap();
           // resultMap.put("code", resultCode);
           // resultMap.put("message", responseMessage);
-          mSuccessCallback.invoke(successStatus, resultCode, responseMessage);
+          mSuccessCallback.invoke(successStatus, resultCode, responseMessage, token);
         }
 
       }catch (Exception e){
