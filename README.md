@@ -1,5 +1,8 @@
 # react-native-we-accept
 
+##[NOTE] iOS is still under development! will be published soon!
+
+
 ## Getting started
 
 `$ npm install react-native-we-accept --save`
@@ -103,7 +106,7 @@ WeAccept.payWithToken({
   email: "email",
   phoneNumber: "phoneNumber",
   postalCode: "postalCode",
-});
+}, successCallback: function, errorCallback: function);
 ```
 
 | Prop                  | Description                    | Type   | Default      |
@@ -142,7 +145,7 @@ WeAccept.payWithNoToken({
   email: "email",
   phoneNumber: "phoneNumber",
   postalCode: "postalCode",
-});
+}, successCallback: function, errorCallback: function);
 ```
 
 | Prop                  | Description                     | Type    | Default      |
@@ -174,7 +177,7 @@ onSuccess function
 | **`message`** | error message mapped from result code                                 | String  | **Optional** |
 
 ```
-(status: boolean, code: number, message)=>{
+(status: boolean, code: number, message: string, token?: string)=>{
   ... add your success code block here
 }
 ```
